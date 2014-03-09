@@ -104,13 +104,11 @@ if strcmp(get(handles.startStopCamera,'String'),'Start Camera')
       % Camera is off. Change button string and start camera.
       set(handles.startStopCamera,'String','Stop Camera')
       start(handles.video)
-      set(handles.startAcquisition,'Enable','on');
       set(handles.captureImage,'Enable','on');
 else
       % Camera is on. Stop camera and change button string.
       set(handles.startStopCamera,'String','Start Camera')
       stop(handles.video)
-      set(handles.startAcquisition,'Enable','off');
       set(handles.captureImage,'Enable','off');
 end
 
@@ -125,29 +123,6 @@ frame = get(get(handles.cameraAxes,'children'),'cdata'); % The current displayed
 imwrite(frame, 'image.jpg');
 %save('testframe.mat', 'frame');
 disp('Frame saved to file ''testframe.mat''');
-
-
-% --- Executes on button press in startAcquisition.
-function startAcquisition_Callback(~, ~, handles)
-% hObject    handle to startAcquisition (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-% Start/Stop acquisition
-if strcmp(get(handles.startAcquisition,'String'),'Start Acquisition')
-      % Camera is not acquiring. Change button string and start acquisition.
-      set(handles.startAcquisition,'String','Stop Acquisition');
-      trigger(handles.video);
-else
-      % Camera is acquiring. Stop acquisition, save video data,
-      % and change button string.
-      stop(handles.video);
-      disp('Saving captured video...');
-      videodata = getdata(handles.video);
-      save('testvideo.mat', 'videodata');
-      disp('Video saved to file ''testvideo.mat''');
-      start(handles.video); % Restart the camera
-      set(handles.startAcquisition,'String','Start Acquisition');
-end
 
 
 % --- Executes when user attempts to close MyCameraGUI.
@@ -169,6 +144,5 @@ function MyCameraGUI_CloseRequestFcn(hObject, eventdata, handles)
 % Hint: delete(hObject) closes the figure
 set(handles.startStopCamera,'String','Start Camera')
 stop(handles.video)
-set(handles.startAcquisition,'Enable','off');
 set(handles.captureImage,'Enable','off');
 delete(hObject);
